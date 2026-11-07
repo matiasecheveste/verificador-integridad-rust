@@ -1,0 +1,29 @@
+[package]
+name = "verificador-integridad"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.80"
+authors = ["Matías Nicolás Echeveste Cardozo"]
+license = "MIT"
+description = "Genera y verifica manifiestos SHA-256 de carpetas para detectar archivos alterados, faltantes o nuevos"
+
+[[bin]]
+name = "verificar"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4.5", features = ["derive"] }
+hex = "0.4"
+rayon = "1.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+walkdir = "2.5"
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+lto = true
+strip = true
