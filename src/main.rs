@@ -78,8 +78,8 @@ fn ejecutar() -> Result<bool> {
             fs::write(&salida, serde_json::to_string_pretty(&m)? + "\n")
                 .with_context(|| format!("no se pudo escribir {}", salida.display()))?;
             println!(
-                "Manifiesto con {} archivos guardado en {}",
-                m.archivos.len(),
+                "Manifiesto con {} guardado en {}",
+                cantidad(m.archivos.len(), "archivo", "archivos"),
                 salida.display()
             );
             Ok(true)
@@ -117,16 +117,21 @@ fn ejecutar() -> Result<bool> {
                     println!("NUEVO     {r}");
                 }
                 println!(
-                    "{} intactos, {} alterados, {} faltantes, {} nuevos",
-                    informe.intactos,
-                    informe.alterados.len(),
-                    informe.faltantes.len(),
-                    informe.nuevos.len()
+                    "{}, {}, {}, {}",
+                    cantidad(informe.intactos, "intacto", "intactos"),
+                    cantidad(informe.alterados.len(), "alterado", "alterados"),
+                    cantidad(informe.faltantes.len(), "faltante", "faltantes"),
+                    cantidad(informe.nuevos.len(), "nuevo", "nuevos")
                 );
             }
             Ok(informe.integro())
         }
     }
+}
+
+/// Cantidad con el sustantivo en singular o plural: «1 archivo», «3 archivos».
+fn cantidad(n: usize, singular: &str, plural: &str) -> String {
+    format!("{n} {}", if n == 1 { singular } else { plural })
 }
 
 fn main() -> ExitCode {
